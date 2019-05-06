@@ -1,10 +1,13 @@
 package main
 
 import (
-	"os"
 	"bufio"
-	"github.com/pidurentry/pattern"
 	"fmt"
+	"github.com/pidurentry/buttplug-go"
+	"github.com/pidurentry/pattern"
+	"github.com/pidurentry/pattern/tools"
+	"github.com/pidurentry/patternplayer/device"
+	"os"
 	"time"
 )
 
@@ -20,32 +23,41 @@ func main() {
 		panic(err)
 	}
 
-	player := NewPlayer(pattern, &debug{})
+	player := NewPlayer(pattern, newDevice())
 	if err := player.Start(); err != nil {
 		panic(err)
 	}
 }
 
-type debug struct {}
-
-func (*debug) Move(Value, Speed uint64) error {
-	fmt.Printf("Move to %d with speed %d\n", Value, Speed)
-	time.Sleep(250 * time.Millisecond)
-	return nil
-}
-
-func (*debug) Rotate(Speed uint64, Clockwise bool) error {
-	direction := "clockwise"
-	if !Clockwise {
-		direction = "anticlockwise"
+func newDevice() tools.Device {
+	conn, err := buttplug.Dial("ws://localhost:12345/buttplug")
+	if err != nil {
+		panic(fmt.Sprintf("%#v", err))
 	}
-	fmt.Printf("Rotate %s with speed %d\n", direction, Speed)
-	time.Sleep(250 * time.Millisecond)
-	return nil
-}
+	handler := buttplug.NewHandler(conn)
 
-func (*debug) Vibrate(Speed uint64) error {
-	fmt.Printf("Vibrate at speed %d\n", Speed)
-	time.Sleep(250 * time.Millisecond)
-	return nil
+	info, err := handler.Handshake("buttplug-example")
+	if err != nil {
+		panic(fmt.Sprintf("%#v", err))
+	}
+	fmt.Printf("%#v\n", info)
+
+	go func() {
+		ticker := info.MaxPingTime().Ticker()
+		for {
+			<-ticker.C
+			if !handler.Ping() {
+				panic("failed to ping server")
+			}
+		}
+	}()
+
+	deviceManager := buttplug.NewDeviceManager(handler)
+	deviceManager.Scan(15 * time.Second).Wait()
+
+	device, err := device.NewFleshlightLaunch(deviceManager.FleshlightLaunches()[0])
+	if err != nil {
+		panic(err)
+	}
+	return device
 }

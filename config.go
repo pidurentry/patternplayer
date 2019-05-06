@@ -2,7 +2,7 @@ package main
 
 import "flag"
 
-var config = struct{
+var config = struct {
 	pattern string
 }{}
 

@@ -1,2 +1,6 @@
+github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH/Q=
+github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
+github.com/pidurentry/buttplug-go v0.0.0-20190410200554-0b2e068d769a h1:DIcuKv1jCe8vf10lqdD/5hZ2nnb3qYn0JycyXSnvE4s=
+github.com/pidurentry/buttplug-go v0.0.0-20190410200554-0b2e068d769a/go.mod h1:oJXeBWse2BXoaZYRQFJ5p1Ut69KYf6SfiUJ/oaYnOhQ=
 github.com/pidurentry/pattern v0.0.0-20190425213250-807fbe04ca12 h1:Kb9MwbEqV573Vs/gMhtD+7UOmWvS+KGggkLzpxTpAUI=
 github.com/pidurentry/pattern v0.0.0-20190425213250-807fbe04ca12/go.mod h1:zRNfouGINk3Fzqwz3XiPgtL1RzcAb9ytX7Svv7hXxpY=

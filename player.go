@@ -2,24 +2,24 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"github.com/pidurentry/pattern"
 	"github.com/pidurentry/pattern/tools"
+	"time"
 )
 
 type Player struct {
-	pattern pattern.Pattern
-	device tools.Device
-	active string
-	queue []tools.Action
+	pattern   pattern.Pattern
+	device    tools.Device
+	active    string
+	queue     []tools.Action
 	interrupt chan bool
 }
 
 func NewPlayer(pattern pattern.Pattern, device tools.Device) *Player {
 	return &Player{
-		pattern: pattern,
-		device: device,
-		active: pattern.Pattern,
+		pattern:   pattern,
+		device:    device,
+		active:    pattern.Pattern,
 		interrupt: make(chan bool, 0),
 	}
 }
@@ -45,8 +45,8 @@ func (player *Player) Start() error {
 		action.Apply(player, player.pattern.Variables, player.device)
 
 		select {
-		case <- player.interrupt:
-			<- player.interrupt
+		case <-player.interrupt:
+			<-player.interrupt
 		default:
 		}
 	}
